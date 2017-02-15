@@ -5,6 +5,24 @@ describe("readData", function() {
     });
   });
   
+  describe("parse", function() {
+    it("Парсинг данных", function() {
+      assert.equal(parse('[{"Id": 0, "City": "г. Белинский"}, {"Id": 1, "City": "г. Каменка"}, {"Id": 2, "City": "ЗАТО п. Солнечный"}]'), [
+        {
+          "Id": 0,
+          "City": "г. Белинский"
+        },
+        {
+          "Id": 1,
+          "City": "г. Каменка"
+        },
+        {
+          "Id": 2,
+          "City": "ЗАТО п. Солнечный"
+        }]);
+    });
+  });
+  
   it("Чтение данных", function() {
     assert.deepEqual(readData("js/data/dataExample.json"), [
     {
