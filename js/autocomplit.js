@@ -11,3 +11,7 @@ function readFromFile(path) {
     return xhr.responseText;
   }
 }
+
+function parse(str) {
+  return JSON.parse(str);
+}
