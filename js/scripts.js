@@ -1,4 +1,4 @@
-var autocompliteField = document.getElementById("autocomplit-field");
+var autocompliteField = document.getElementById("autocomplite-field");
 
 var variants = document.getElementById("variants");
 
@@ -13,14 +13,19 @@ variants.onclick = function(event) {
 
 autocompliteField.addEventListener("input", function(event) {
   function f(text) {
-    var data = JSON.parse(text);
+    if (this.value) {
+      var data = JSON.parse(text);
     
-    var reg = new RegExp(this.value, "ig");
+      var reg = new RegExp(this.value, "ig");
     
-    data = data.filter(isRegularTrue);
+      data = data.filter(isRegularTrue);
     
-    variants.textContent = "";
-    variants.appendChild(CreateList(data));
+      variants.textContent = "";
+      variants.appendChild(CreateList(data));
+      variants.classList.add("variants-container--visible");
+    } else {
+      variants.classList.remove("variants-container--visible");
+    }
     
     function isRegularTrue(value) {
       return value.City.search(reg) > 0;
