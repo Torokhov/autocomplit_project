@@ -29,8 +29,13 @@
   top: 35px;
   left: 0px;
   
+  display: none;
   width: 375px;
   
   border: 1px solid lightgrey;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px -6px rgba(0,0,0,0.5);
+}
+
+.variants-container--visible {
+  display: block;
 }
