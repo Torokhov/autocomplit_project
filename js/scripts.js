@@ -21,7 +21,13 @@ autocompliteField.addEventListener("input", function(event) {
     
     if (data.length !== 0 && this.value) {
       variants.textContent = "";
-      variants.appendChild(CreateList(data));
+      var listSize = variants.getAttribute("data-list-size");
+      variants.appendChild(createList(data, listSize));
+      
+      if (data.length > listSize) {
+        variants.appendChild(createMessage(listSize, data.length));  
+      }
+      
       variants.classList.add("variants-container--visible");
     } else {
       variants.classList.remove("variants-container--visible");
@@ -31,23 +37,41 @@ autocompliteField.addEventListener("input", function(event) {
       return value.City.search(reg) >= 0;
     };
     
-    function CreateList(data) {
+    function createList(data, size) {
       var fragment = document.createDocumentFragment();
       var elem;
-      
-      data.forEach(function(value) {
-        elem = document.createElement("li");
-        elem.textContent = value.City;
-        elem.classList.add("variants-list__item")
-        
-        fragment.appendChild(elem);
-      });
+      if (data.length < size) {
+        data.forEach(function(value) {
+          elem = document.createElement("li");
+          elem.textContent = value.City;
+          elem.classList.add("variants-list__item");
+
+          fragment.appendChild(elem);
+        });
+      } else {
+        for (var i = 0; i < size; i++) {
+          elem = document.createElement("li");
+          elem.textContent = data[i].City;
+          elem.classList.add("variants-list__item");
+          
+          fragment.appendChild(elem);
+        }
+      }
       
       var list = document.createElement("ul");
       list.classList.add("variants-list");
       list.appendChild(fragment);
       
       return list;
+    };
+    
+    function createMessage(size, length) {
+      var message = document.createElement("div");
+      message.textContent = "Показано " + size + " из " + length + " найденных городов. Уточните запрос, чтобы увидеть остальные.";
+      
+      message.classList.add("message");
+      
+      return message;
     };
   };
   
