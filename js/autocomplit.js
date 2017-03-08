@@ -18,10 +18,3 @@ function get(path) {
   });
 }
 
-function parse(path) {
-  get(path).then(function(text) {
-    return JSON.parse(text);
-  }, function(error) {
-    console.log("Failed to fetch: " + error);
-  });
-}
