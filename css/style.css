@@ -6,6 +6,8 @@
   
   padding: 5px;
   width: 250px;
+  
+  border: 1px solid lightgrey;
 }
 
 .text-field:focus::-webkit-input-placeholder {color: lightgray;}
@@ -15,4 +17,20 @@
 
 .wrapper {
   position: relative;
+}
+
+.variants-container {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #404040;
+  
+  position: absolute;
+  top: 35px;
+  left: 0px;
+  
+  width: 375px;
+  
+  border: 1px solid lightgrey;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
