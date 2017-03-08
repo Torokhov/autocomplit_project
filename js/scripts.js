@@ -13,13 +13,12 @@ variants.onclick = function(event) {
 
 autocompliteField.addEventListener("input", function(event) {
   function f(text) {
-    if (this.value) {
-      var data = JSON.parse(text);
+    var data = JSON.parse(text);
+    var reg = new RegExp(this.value, "ig");
     
-      var reg = new RegExp(this.value, "ig");
+    data = data.filter(isRegularTrue);
     
-      data = data.filter(isRegularTrue);
-    
+    if (data.length !== 0) {
       variants.textContent = "";
       variants.appendChild(CreateList(data));
       variants.classList.add("variants-container--visible");
