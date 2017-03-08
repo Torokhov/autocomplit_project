@@ -8,6 +8,7 @@ variants.onclick = function(event) {
   if (target.tagName === "LI") {
     autocompliteField.value = target.textContent;
     this.removeChild(this.firstChild);
+    this.classList.remove("variants-container--visible");
   }
 };
 
@@ -27,7 +28,7 @@ autocompliteField.addEventListener("input", function(event) {
     }
     
     function isRegularTrue(value) {
-      return value.City.search(reg) > 0;
+      return value.City.search(reg) >= 0;
     };
     
     function CreateList(data) {
@@ -42,6 +43,7 @@ autocompliteField.addEventListener("input", function(event) {
       });
       
       var list = document.createElement("ul");
+      list.classList.add("variants-list");
       list.appendChild(fragment);
       
       return list;
