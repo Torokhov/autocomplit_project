@@ -1,0 +1,14 @@
+.text-field {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #404040;
+  
+  padding: 5px;
+  width: 250px;
+}
+
+.text-field:focus::-webkit-input-placeholder {color: lightgray;}
+.text-field:focus::-moz-placeholder          {color: lightgray;}
+.text-field:focus:-moz-placeholder           {color: lightgray;}
+.text-field:focus:-ms-input-placeholder      {color: lightgray;}
