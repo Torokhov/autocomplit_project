@@ -39,3 +39,28 @@
 .variants-container--visible {
   display: block;
 }
+
+.variants-list {
+  padding: 0;
+  margin: 0;
+  
+  list-style: none;
+}
+
+.variants-list__item {
+  padding: 5px;
+}
+
+.variants-list__item:hover {
+  color: white;
+  
+  background-color: dodgerblue;
+  cursor: pointer;
+}
+
+.message {
+  color: lightgray;
+  font-size: 12px;
+  
+  padding: 5px;
+}
