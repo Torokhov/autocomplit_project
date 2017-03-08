@@ -12,3 +12,7 @@
 .text-field:focus::-moz-placeholder          {color: lightgray;}
 .text-field:focus:-moz-placeholder           {color: lightgray;}
 .text-field:focus:-ms-input-placeholder      {color: lightgray;}
+
+.wrapper {
+  position: relative;
+}
