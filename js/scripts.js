@@ -19,7 +19,7 @@ autocompliteField.addEventListener("input", function(event) {
     
     data = data.filter(isRegularTrue);
     
-    if (data.length !== 0) {
+    if (data.length !== 0 && this.value) {
       variants.textContent = "";
       variants.appendChild(CreateList(data));
       variants.classList.add("variants-container--visible");
@@ -38,6 +38,7 @@ autocompliteField.addEventListener("input", function(event) {
       data.forEach(function(value) {
         elem = document.createElement("li");
         elem.textContent = value.City;
+        elem.classList.add("variants-list__item")
         
         fragment.appendChild(elem);
       });
