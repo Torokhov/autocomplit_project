@@ -64,3 +64,9 @@
   
   padding: 5px;
 }
+
+.message--amount {
+  color: lightgray;
+  
+  padding: 5px;
+}
