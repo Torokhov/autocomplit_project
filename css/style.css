@@ -7,11 +7,17 @@
   padding: 5px;
   width: 250px;
   
+  box-sizing: border-box;
   border: 1px solid lightgrey;
+}
+
+.text-field:focus {
+  outline: dodgerblue solid 2px;
 }
 
 .text-field--error {
   outline: red solid 2px;
+  outline-offset: -2px;
 }
 
 .text-field:focus::-webkit-input-placeholder {color: lightgray;}
