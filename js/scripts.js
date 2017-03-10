@@ -1,4 +1,6 @@
+
 var autocompliteField = document.getElementById("autocomplite-field");
+autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
 var variants = document.getElementById("variants");
 
@@ -13,69 +15,68 @@ variants.onclick = function(event) {
 };
 
 autocompliteField.addEventListener("input", function(event) {
-  function f(text) {
-    var data = JSON.parse(text);
-    var reg = new RegExp(this.value, "ig");
-    
-    data = data.filter(isRegularTrue);
-    
-    if (data.length !== 0 && this.value) {
-      variants.textContent = "";
-      var listSize = variants.getAttribute("data-list-size");
-      variants.appendChild(createList(data, listSize));
+  var listSize = variants.getAttribute("data-list-size");
+  if (this.value) {
+    this.autocompliteLogic.getData(this.value).then(function(data) {
+      removeChildren(variants);
+      variants.classList.add("variants-container--visible");
       
       if (data.length > listSize) {
-        variants.appendChild(createMessage(listSize, data.length));  
+        variants.appendChild(createMessage("amount", listSize, data.length));
       }
       
-      variants.classList.add("variants-container--visible");
-    } else {
-      variants.classList.remove("variants-container--visible");
-    }
-    
-    function isRegularTrue(value) {
-      return value.City.search(reg) >= 0;
-    };
-    
-    function createList(data, size) {
-      var fragment = document.createDocumentFragment();
-      var elem;
-      if (data.length < size) {
-        data.forEach(function(value) {
-          elem = document.createElement("li");
-          elem.textContent = value.City;
-          elem.classList.add("variants-list__item");
-
-          fragment.appendChild(elem);
-        });
-      } else {
-        for (var i = 0; i < size; i++) {
-          elem = document.createElement("li");
-          elem.textContent = data[i].City;
-          elem.classList.add("variants-list__item");
-          
-          fragment.appendChild(elem);
-        }
+      if (data.length > 0) {
+        return createList(data);
       }
-      
-      var list = document.createElement("ul");
-      list.classList.add("variants-list");
-      list.appendChild(fragment);
-      
-      return list;
-    };
-    
-    function createMessage(size, length) {
-      var message = document.createElement("div");
-      message.textContent = "Показано " + size + " из " + length + " найденных городов. Уточните запрос, чтобы увидеть остальные.";
-      
-      message.classList.add("message");
-      
-      return message;
-    };
-  };
-  
-  var g = f.bind(this);
-  
-  get("data/kladr.json").then(g);
+    }).then(function(list) {
+      variants.insertBefore(list, variants.firstChild);
+    }).then(function() {} , function() {
+      variants.appendChild(createMessage("not found"));
+    });
+  } else {
+    variants.classList.remove("variants-container--visible");
+  }
 }); 
+
+function createList(data) {
+  var fragment = document.createDocumentFragment();
+  var listSize = variants.getAttribute("data-list-size");
+  var elem;
+  var i = 0;
+  while (i < listSize && i < data.length) {
+    elem = document.createElement("li");
+    elem.textContent = data[i].City;
+    elem.classList.add("variants-list__item");
+    fragment.appendChild(elem);
+    
+    i++;
+  }
+  
+  var list = document.createElement("ul");
+  list.classList.add("variants-list");
+  list.appendChild(fragment);
+  
+  return list;
+};
+
+function createMessage(type, listSize, dataLength) {
+  var message = document.createElement("div");
+  
+  switch (type) {
+    case "amount":
+      message.textContent = "Показано " + listSize + " из " + dataLength + " найденных городов. Уточните запрос, чтобы увидеть остальные.";
+      message.classList.add("message");
+      return message;   
+        
+    case "not found": 
+      message.textContent = "Не найдено";
+      message.classList.add("message--amount");
+      return message;   
+  }
+}
+
+function removeChildren(elem) {
+  while (elem.children.length > 0) {
+    elem.removeChild(elem.firstChild);
+  }
+}
