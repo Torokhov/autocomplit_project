@@ -10,6 +10,10 @@
   border: 1px solid lightgrey;
 }
 
+.text-field--error {
+  outline: red solid 2px;
+}
+
 .text-field:focus::-webkit-input-placeholder {color: lightgray;}
 .text-field:focus::-moz-placeholder          {color: lightgray;}
 .text-field:focus:-moz-placeholder           {color: lightgray;}
