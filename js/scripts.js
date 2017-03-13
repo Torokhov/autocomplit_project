@@ -9,13 +9,32 @@ variants.onclick = function(event) {
   
   if (target.tagName === "LI") {
     autocompliteField.value = target.textContent;
+    autocompliteField.completed = true;
+    
     this.removeChild(this.firstChild);
     this.classList.remove("variants-container--visible");
   }
 };
 
+autocompliteField.onfocus = function() {
+  this.select();
+};
+
+autocompliteField.onblur = function() {
+  var fullfilled = showError.bind(this);
+  this.autocompliteLogic.isValid(this.value).then(fullfilled);
+  
+  function showError(res) {
+    if (!res || !this.value) {
+      this.classList.add("text-field--error");
+    } 
+  };
+}
+
 autocompliteField.addEventListener("input", function(event) {
   var listSize = variants.getAttribute("data-list-size");
+  this.classList.remove("text-field--error");
+  
   if (this.value) {
     this.autocompliteLogic.getData(this.value).then(function(data) {
       removeChildren(variants);
