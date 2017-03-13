@@ -35,11 +35,9 @@ function Autocomplite(path) {
     }
   
     return data.then(function(data) {
-      var reg = new RegExp(str, "ig");
       return data.filter(function(value) {
-        return value.City.search(reg) >= 0;
+        return value.City === str;
       }).length > 0;  
     });
   };
 }
-
