@@ -2,6 +2,8 @@
 var autocompliteField = document.getElementById("autocomplite-field");
 autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
+var error = document.getElementById("error-message");
+
 var variants = document.getElementById("variants");
 
 variants.onclick = function(event) {
@@ -9,31 +11,34 @@ variants.onclick = function(event) {
   
   if (target.tagName === "LI") {
     autocompliteField.value = target.textContent;
-    autocompliteField.completed = true;
-    
-    this.removeChild(this.firstChild);
     this.classList.remove("variants-container--visible");
   }
 };
 
 autocompliteField.onfocus = function() {
   this.select();
+  this.classList.remove("text-field--error");
+  error.classList.remove("error--visible");
 };
 
 autocompliteField.onblur = function() {
   var fullfilled = showError.bind(this);
-  this.autocompliteLogic.isValid(this.value).then(fullfilled);
-  
+  var onblurFunc = (function() {
+    this.autocompliteLogic.isValid(this.value).then(fullfilled)
+  }).bind(this);
+  setTimeout(onblurFunc, 170);
+ 
   function showError(res) {
     if (!res || !this.value) {
       this.classList.add("text-field--error");
+      variants.classList.remove("variants-container--visible");
+      error.classList.add("error--visible");
     } 
   };
 }
 
 autocompliteField.addEventListener("input", function(event) {
   var listSize = variants.getAttribute("data-list-size");
-  this.classList.remove("text-field--error");
   
   if (this.value) {
     this.autocompliteLogic.getData(this.value).then(function(data) {
@@ -91,8 +96,13 @@ function createMessage(type, listSize, dataLength) {
       message.textContent = "Не найдено";
       message.classList.add("message--amount");
       return message;   
+      
+    case "error": 
+      message.textContent = "Выберите значение из списка";
+      message.classList.add("message--error");
+      return message;
   }
-}
+};
 
 function removeChildren(elem) {
   while (elem.children.length > 0) {
