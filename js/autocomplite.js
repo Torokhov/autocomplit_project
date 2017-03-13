@@ -10,11 +10,9 @@ function Autocomplite(path) {
     return data.then(function(data) {
       var reg = new RegExp(str, "ig");
       
-      return data.filter(isRegularTrue);
-      
-      function isRegularTrue(value) {
-        return value.City.search(reg) >= 0;
-      };
+      return data.filter(function(value) {
+         return value.City.search(reg) >= 0;
+      });
     });
   };
   
@@ -30,4 +28,18 @@ function Autocomplite(path) {
   function parse(text) {
     return JSON.parse(text);
   };
+  
+  this.isValid = function(str) {
+    if (!data) {
+      data = setData(this.path).then(parse);
+    }
+  
+    return data.then(function(data) {
+      var reg = new RegExp(str, "ig");
+      return data.filter(function(value) {
+        return value.City.search(reg) >= 0;
+      }).length > 0;  
+    });
+  };
 }
+
