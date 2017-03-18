@@ -75,7 +75,13 @@
   padding: 5px;
 }
 
-.message--amount {
+.message--not-found {
+  color: lightgray;
+  
+  padding: 5px;
+}
+
+.message--server-error {
   color: lightgray;
   
   padding: 5px;
