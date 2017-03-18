@@ -1,6 +1,6 @@
 
 var autocompliteField = document.getElementById("autocomplite-field");
-autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
+autocompliteField.autocompliteLogic = new Autocomplite("data/kladr");
 
 var error = document.getElementById("error-message");
 
@@ -26,7 +26,7 @@ autocompliteField.onblur = function() {
   var onblurFunc = (function() {
     this.autocompliteLogic.isValid(this.value).then(fullfilled)
   }).bind(this);
-  setTimeout(onblurFunc, 170);
+  setTimeout(onblurFunc, 200);
  
   function showError(res) {
     if (!res || !this.value) {
@@ -52,8 +52,14 @@ autocompliteField.addEventListener("input", function(event) {
       if (data.length > 0) {
         return createList(data);
       }
+    }, function() {
+      removeChildren(variants);
+      variants.classList.add("variants-container--visible");
+      variants.appendChild(createMessage("server error"));
     }).then(function(list) {
-      variants.insertBefore(list, variants.firstChild);
+      if (list) {
+        variants.insertBefore(list, variants.firstChild);
+      }
     }).then(function() {} , function() {
       variants.appendChild(createMessage("not found"));
     });
@@ -94,12 +100,12 @@ function createMessage(type, listSize, dataLength) {
         
     case "not found": 
       message.textContent = "Не найдено";
-      message.classList.add("message--amount");
+      message.classList.add("message--not-found");
       return message;   
       
-    case "error": 
-      message.textContent = "Выберите значение из списка";
-      message.classList.add("message--error");
+    case "server error": 
+      message.textContent = "Что-то пошло не так. Проверьте соединение с интернетом и попробуйте еще раз";
+      message.classList.add("message--server-error");
       return message;
   }
 };
