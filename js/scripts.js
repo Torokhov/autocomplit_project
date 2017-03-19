@@ -67,7 +67,7 @@ autocompliteField.onblur = function() {
         if (filter(this.value, list.children).length === 0) {
           showError();
         }
-      } else {
+      } else if (!variants.querySelector(".variants-list") && !variants.querySelector(".message--server-error")) {
         showError();
       }
     } else {
@@ -94,8 +94,11 @@ function inputHandler() {
   var listSize = variants.getAttribute("data-list-size");
   var loader = document.getElementById("loader");
   if (this.value) {
+//    removeChildren(variants);
     variants.classList.add("variants-container--visible");
-    loader.classList.add("loader-wrapper--visible");
+    if (!variants.querySelector(".message--server-error")) {
+      loader.classList.add("loader-wrapper--visible");  
+    }
     setPosition();
 
     this.autocompliteLogic.getData(this.value).then(function(data) {
@@ -109,11 +112,21 @@ function inputHandler() {
         return createList(data); 
       }
     }, function() {
+      loader.classList.add("loader-wrapper--visible");
+      if (variants.querySelector(".message--server-error")) {
+        variants.querySelector(".btn--refresh-btn").style.display = "none";
+        variants.querySelector(".message--server-error").style.display = "none";
+      }
       setTimeout(function() {
         loader.classList.remove("loader-wrapper--visible")
-        variants.insertBefore(createRefreshBtn(), variants.firstChild);
-        variants.insertBefore(createMessage("server error"), variants.firstChild);
-        setPosition();
+        if (!variants.querySelector(".message--server-error")) {
+          variants.insertBefore(createRefreshBtn(), variants.firstChild);
+          variants.insertBefore(createMessage("server error"), variants.firstChild);
+          setPosition();
+        } else {
+          variants.querySelector(".btn--refresh-btn").style.display = "block";
+          variants.querySelector(".message--server-error").style.display = "block";
+        }
       }, 1000);
       throw new Error("server error");
     }).then(function(list) {

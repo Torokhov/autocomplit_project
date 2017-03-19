@@ -3,10 +3,8 @@ function Autocomplite(path) {
   var data;
   
   this.getData = function(str) {
-    if (!data) {
-      data = setData(this.path).then(parse);
-    }
-    
+    data = setData(this.path).then(parse);
+  
     return data.then(function(data) {
       var reg = new RegExp(str, "ig");
       

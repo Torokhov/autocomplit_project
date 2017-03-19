@@ -36,7 +36,7 @@
   color: #404040;
   
   position: absolute;
-  top: 35px;
+  top: 0px;
   left: 0px;
   
   display: none;
@@ -83,7 +83,7 @@
 
 .message--server-error {
   color: lightgray;
-  
+
   padding: 5px;
 }
 
@@ -120,7 +120,6 @@
 }
 
 .loader {
-/*  position: absolute;*/
   display: inline-block;
   top: 40px;
   

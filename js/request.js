@@ -15,7 +15,9 @@ function Request() {
       xhr.addEventListener("error", function() {
         fail(new Error("Network error"));
       });
-      xhr.send(null);
+      
+//      setTimeout(function() {xhr.send(null)}, 10000);
+      xhr.send(null)
     });
   }
 }
