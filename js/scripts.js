@@ -59,14 +59,12 @@ autocompliteField.onblur = function() {
   
   function isValid() {
     if (this.value) {
-      if (variants.querySelector(".variants-list") &&           variants.querySelector(".variants-list").children.length === 1) {
+      if (variants.querySelector(".variants-list") && variants.querySelector(".variants-list").children.length === 1) {
         this.value = variants.querySelector(".variants-list").firstChild.textContent;
         variants.classList.remove("variants-container--visible");
       } else if (variants.querySelector(".variants-list")) {
         var list = variants.querySelector(".variants-list");
         if (filter(this.value, list.children).length === 0) {
-          showError();
-        } else {
           showError();
         }
       } else {
@@ -98,6 +96,7 @@ function inputHandler() {
   if (this.value) {
     variants.classList.add("variants-container--visible");
     loader.classList.add("loader-wrapper--visible");
+    setPosition();
 
     this.autocompliteLogic.getData(this.value).then(function(data) {
       removeChildren(variants);
@@ -114,6 +113,7 @@ function inputHandler() {
         loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(createRefreshBtn(), variants.firstChild);
         variants.insertBefore(createMessage("server error"), variants.firstChild);
+        setPosition();
       }, 1000);
       throw new Error("server error");
     }).then(function(list) {
@@ -124,6 +124,7 @@ function inputHandler() {
         
         loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(list, variants.firstChild);
+        setPosition();
       } else {
         throw new Error("not data");
       }
@@ -134,13 +135,23 @@ function inputHandler() {
       if (e.message === "not data" && !variants.querySelector(".message--not-found") && !variants.querySelector(".variants-list")) {
         loader.classList.remove("loader-wrapper--visible");
         variants.insertBefore(createMessage("not found"), variants.firstChild);
+        setPosition();
       }
     });
   } else {
-    //отключаем анимацию
     loader.classList.remove("loader-wrapper--visible");
     variants.classList.remove("variants-container--visible");
   }
+};
+
+function setPosition() {
+  var coords = autocompliteField.getBoundingClientRect();
+  var docEndSpace = document.documentElement.clientHeight - coords.bottom;
+    if (docEndSpace < variants.offsetHeight) {
+      variants.style.top = -variants.offsetHeight - 3 + "px";
+    } else {
+      variants.style.top = autocompliteField.offsetHeight + 3 +"px";
+    }
 };
 
 function createList(data) {
