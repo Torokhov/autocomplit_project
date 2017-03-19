@@ -28,16 +28,4 @@ function Autocomplite(path) {
   function parse(text) {
     return JSON.parse(text);
   };
-  
-  this.isValid = function(str) {
-    if (!data) {
-      data = setData(this.path).then(parse);
-    }
-  
-    return data.then(function(data) {
-      return data.filter(function(value) {
-        return value.City === str;
-      }).length > 0;  
-    });
-  };
 }

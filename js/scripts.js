@@ -1,4 +1,3 @@
-
 var autocompliteField = document.getElementById("autocomplite-field");
 autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
@@ -54,29 +53,49 @@ autocompliteField.onfocus = function() {
 };
 
 autocompliteField.onblur = function() {
-  var fullfilled = showError.bind(this);
-  var onblurFunc = (function() {
-    this.autocompliteLogic.isValid(this.value).then(fullfilled)
-  }).bind(this);
-  setTimeout(onblurFunc, 200);
- 
-  function showError(res) {
-    if (!res || !this.value) {
-      this.classList.add("text-field--error");
-      variants.classList.remove("variants-container--visible");
-      error.classList.add("error--visible");
-    } 
+  var onBlurFunc = isValid.bind(this);
+  
+  setTimeout(onBlurFunc, 200);
+  
+  function isValid() {
+    if (this.value) {
+      if (variants.querySelector(".variants-list") &&           variants.querySelector(".variants-list").children.length === 1) {
+        this.value = variants.querySelector(".variants-list").firstChild.textContent;
+        variants.classList.remove("variants-container--visible");
+      } else if (variants.querySelector(".variants-list")) {
+        var list = variants.querySelector(".variants-list");
+        if (filter(this.value, list.children).length === 0) {
+          showError();
+        } else {
+          showError();
+        }
+      } else {
+        showError();
+      }
+    } else {
+      showError();
+    }
   };
-}
+ 
+  function showError() {
+    autocompliteField.classList.add("text-field--error");
+    variants.classList.remove("variants-container--visible");
+    error.classList.add("error--visible");
+  };
+  
+  function filter(value, list) {
+    return [].filter.call(list, function(elem) {
+      return elem.textContent === value;
+    });
+  }
+};
 
 autocompliteField.addEventListener("input", inputHandler); 
 
 function inputHandler() {
   var listSize = variants.getAttribute("data-list-size");
   var loader = document.getElementById("loader");
-  
   if (this.value) {
-    //запуск анимации
     variants.classList.add("variants-container--visible");
     loader.classList.add("loader-wrapper--visible");
 
@@ -91,7 +110,6 @@ function inputHandler() {
         return createList(data); 
       }
     }, function() {
-      //отключаем анимацию через 1 сек
       setTimeout(function() {
         loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(createRefreshBtn(), variants.firstChild);
@@ -100,7 +118,10 @@ function inputHandler() {
       throw new Error("server error");
     }).then(function(list) {
       if (list) {
-        //отключаем анимацию 
+        if (variants.querySelector(".variants-list")) {
+          variants.removeChild(variants.querySelector(".variants-list"));  
+        }
+        
         loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(list, variants.firstChild);
       } else {
@@ -109,9 +130,8 @@ function inputHandler() {
       
     }, function(e) {
       return e;
-    }).then(function() {} , function(e) {
-      //отключаем анимацию
-      if (e.message === "not data") {
+    }).then(null , function(e) {
+      if (e.message === "not data" && !variants.querySelector(".message--not-found") && !variants.querySelector(".variants-list")) {
         loader.classList.remove("loader-wrapper--visible");
         variants.insertBefore(createMessage("not found"), variants.firstChild);
       }
@@ -121,7 +141,7 @@ function inputHandler() {
     loader.classList.remove("loader-wrapper--visible");
     variants.classList.remove("variants-container--visible");
   }
-}
+};
 
 function createList(data) {
   var fragment = document.createDocumentFragment();
@@ -173,7 +193,7 @@ function createRefreshBtn() {
   refreshBtn.classList.add("btn--refresh-btn");
   refreshBtn.addEventListener("click", inputHandler.bind(autocompliteField));
   return refreshBtn;
-}
+};
 
 function removeChildren(elem) {
   while (elem.children.length > 1) {
