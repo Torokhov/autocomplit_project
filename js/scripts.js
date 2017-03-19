@@ -3,8 +3,8 @@ var autocompliteField = document.getElementById("autocomplite-field");
 autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
 var error = document.getElementById("error-message");
-
 var variants = document.getElementById("variants");
+var currentElem = null;
 
 variants.onclick = function(event) {
   var target = event.target;
@@ -13,6 +13,38 @@ variants.onclick = function(event) {
     autocompliteField.value = target.textContent;
     this.classList.remove("variants-container--visible");
   }
+};
+
+variants.onmouseover = function(event) {
+  if (currentElem) {
+    return;
+  }
+  
+  var target = event.target;
+  
+  while (target !== this) {
+    if (target.tagName == "LI") break;
+    target = target.parentNode;
+  }
+  if (target === this) return;
+
+  currentElem = target;
+  target.classList.add("variants-list__item--selected");
+}
+
+variants.onmouseout = function(event) {
+  if (!currentElem) return;
+
+  var relatedTarget = event.relatedTarget;
+  if (relatedTarget) {
+    while (relatedTarget) {
+      if (relatedTarget == currentElem) return;
+      relatedTarget = relatedTarget.parentNode;
+    }
+  }
+
+  currentElem.classList.remove("variants-list__item--selected");
+  currentElem = null;
 };
 
 autocompliteField.onfocus = function() {
@@ -108,6 +140,8 @@ function createList(data) {
   var list = document.createElement("ul");
   list.classList.add("variants-list");
   list.appendChild(fragment);
+  list.firstChild.classList.add("variants-list__item--selected");
+  currentElem = list.firstChild;
   
   return list;
 };
