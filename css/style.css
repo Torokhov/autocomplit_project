@@ -1,5 +1,15 @@
+@font-face {
+  font-family: "SegoeUIRegular";
+  src: url("../fonts/SegoeUIRegular/SegoeUIRegular.eot");
+  src: url("../fonts/SegoeUIRegular/SegoeUIRegular.eot?#iefix")format("embedded-opentype"),
+  url("../fonts/SegoeUIRegular/SegoeUIRegular.woff") format("woff"),
+  url("../fonts/SegoeUIRegular/SegoeUIRegular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
 .text-field {
-  font-family: "Segoe UI", sans-serif;
+  font-family: "SegoeUIRegular", sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: #404040;
@@ -47,6 +57,7 @@
   display: none;
   width: 375px;
   
+  background-color: white;
   border: 1px solid lightgrey;
   box-shadow: 0 0 20px -6px rgba(0,0,0,0.5);
 }
