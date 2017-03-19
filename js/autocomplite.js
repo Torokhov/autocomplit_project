@@ -6,7 +6,7 @@ function Autocomplite(path) {
     data = setData(this.path).then(parse);
   
     return data.then(function(data) {
-      var reg = new RegExp(str, "ig");
+      var reg = new RegExp("^" + str, "ig");
       
       return data.filter(function(value) {
          return value.City.search(reg) >= 0;

@@ -94,7 +94,7 @@ function inputHandler() {
   var listSize = variants.getAttribute("data-list-size");
   var loader = document.getElementById("loader");
   if (this.value) {
-//    removeChildren(variants);
+    removeChildren(variants);
     variants.classList.add("variants-container--visible");
     if (!variants.querySelector(".message--server-error")) {
       loader.classList.add("loader-wrapper--visible");  

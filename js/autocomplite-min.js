@@ -1,0 +1,1 @@
+function Autocomplite(c){this.path=c;var b;this.getData=function(e){b=a(this.path).then(d);return b.then(function(g){var f=new RegExp("^"+e,"ig");return g.filter(function(h){return h.City.search(f)>=0})})};function a(f){var e=new Request();return e.get(f).then(function(g){return g},function(g){console.log("Fail to fetch data "+g)})}function d(e){return JSON.parse(e)}};

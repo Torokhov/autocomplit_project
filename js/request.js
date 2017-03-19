@@ -16,7 +16,6 @@ function Request() {
         fail(new Error("Network error"));
       });
       
-//      setTimeout(function() {xhr.send(null)}, 10000);
       xhr.send(null)
     });
   }
