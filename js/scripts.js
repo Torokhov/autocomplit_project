@@ -1,6 +1,6 @@
 
 var autocompliteField = document.getElementById("autocomplite-field");
-autocompliteField.autocompliteLogic = new Autocomplite("data/kladr");
+autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
 var error = document.getElementById("error-message");
 
@@ -37,36 +37,59 @@ autocompliteField.onblur = function() {
   };
 }
 
-autocompliteField.addEventListener("input", function(event) {
+autocompliteField.addEventListener("input", inputHandler); 
+
+function inputHandler() {
   var listSize = variants.getAttribute("data-list-size");
+  var loader = document.getElementById("loader");
   
   if (this.value) {
+    //запуск анимации
+    variants.classList.add("variants-container--visible");
+    loader.classList.add("loader-wrapper--visible");
+
     this.autocompliteLogic.getData(this.value).then(function(data) {
       removeChildren(variants);
-      variants.classList.add("variants-container--visible");
       
       if (data.length > listSize) {
-        variants.appendChild(createMessage("amount", listSize, data.length));
+        variants.insertBefore(createMessage("amount", listSize, data.length), loader);
       }
       
       if (data.length > 0) {
-        return createList(data);
+        return createList(data); 
       }
     }, function() {
-      removeChildren(variants);
-      variants.classList.add("variants-container--visible");
-      variants.appendChild(createMessage("server error"));
+      //отключаем анимацию через 1 сек
+      setTimeout(function() {
+        loader.classList.remove("loader-wrapper--visible")
+        variants.insertBefore(createRefreshBtn(), variants.firstChild);
+        variants.insertBefore(createMessage("server error"), variants.firstChild);
+      }, 1000);
+      throw new Error("server error");
     }).then(function(list) {
       if (list) {
+        //отключаем анимацию 
+        loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(list, variants.firstChild);
+      } else {
+        throw new Error("not data");
       }
-    }).then(function() {} , function() {
-      variants.appendChild(createMessage("not found"));
+      
+    }, function(e) {
+      return e;
+    }).then(function() {} , function(e) {
+      //отключаем анимацию
+      if (e.message === "not data") {
+        loader.classList.remove("loader-wrapper--visible");
+        variants.insertBefore(createMessage("not found"), variants.firstChild);
+      }
     });
   } else {
+    //отключаем анимацию
+    loader.classList.remove("loader-wrapper--visible");
     variants.classList.remove("variants-container--visible");
   }
-}); 
+}
 
 function createList(data) {
   var fragment = document.createDocumentFragment();
@@ -110,8 +133,16 @@ function createMessage(type, listSize, dataLength) {
   }
 };
 
+function createRefreshBtn() {
+  var refreshBtn = document.createElement("div");
+  refreshBtn.textContent = "Обновить";
+  refreshBtn.classList.add("btn--refresh-btn");
+  refreshBtn.addEventListener("click", inputHandler.bind(autocompliteField));
+  return refreshBtn;
+}
+
 function removeChildren(elem) {
-  while (elem.children.length > 0) {
+  while (elem.children.length > 1) {
     elem.removeChild(elem.firstChild);
   }
 }
