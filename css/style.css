@@ -61,7 +61,7 @@
   padding: 5px;
 }
 
-.variants-list__item:hover {
+.variants-list__item--selected {
   color: white;
   
   background-color: dodgerblue;
