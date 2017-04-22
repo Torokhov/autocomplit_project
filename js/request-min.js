@@ -1,1 +1,0 @@
-function Request(){this.get=function(a){return new Promise(function(c,b){var d=new XMLHttpRequest();d.open("GET",a,true);d.addEventListener("load",function(){if(d.status<400){c(d.responseText)}else{b(new Error("Request failed: "+d.statusText))}});d.addEventListener("error",function(){b(new Error("Network error"))});d.send(null)})}};

@@ -7,7 +7,7 @@ var currentElem = null;
 
 variants.onclick = function(event) {
   var target = event.target;
-  
+
   if (target.tagName === "LI") {
     autocompliteField.value = target.textContent;
     this.classList.remove("variants-container--visible");
@@ -18,9 +18,9 @@ variants.onmouseover = function(event) {
   if (currentElem) {
     return;
   }
-  
+
   var target = event.target;
-  
+
   while (target !== this) {
     if (target.tagName == "LI") break;
     target = target.parentNode;
@@ -54,9 +54,9 @@ autocompliteField.onfocus = function() {
 
 autocompliteField.onblur = function() {
   var onBlurFunc = isValid.bind(this);
-  
+
   setTimeout(onBlurFunc, 200);
-  
+
   function isValid() {
     if (this.value) {
       if (variants.querySelector(".variants-list") && variants.querySelector(".variants-list").children.length === 1) {
@@ -74,13 +74,13 @@ autocompliteField.onblur = function() {
       showError();
     }
   };
- 
+
   function showError() {
     autocompliteField.classList.add("text-field--error");
     variants.classList.remove("variants-container--visible");
     error.classList.add("error--visible");
   };
-  
+
   function filter(value, list) {
     return [].filter.call(list, function(elem) {
       return elem.textContent === value;
@@ -88,7 +88,7 @@ autocompliteField.onblur = function() {
   }
 };
 
-autocompliteField.addEventListener("input", inputHandler); 
+autocompliteField.addEventListener("input", inputHandler);
 
 function inputHandler() {
   var listSize = variants.getAttribute("data-list-size");
@@ -97,19 +97,19 @@ function inputHandler() {
     removeChildren(variants);
     variants.classList.add("variants-container--visible");
     if (!variants.querySelector(".message--server-error")) {
-      loader.classList.add("loader-wrapper--visible");  
+      loader.classList.add("loader-wrapper--visible");
     }
     setPosition();
 
     this.autocompliteLogic.getData(this.value).then(function(data) {
       removeChildren(variants);
-      
+
       if (data.length > listSize) {
         variants.insertBefore(createMessage("amount", listSize, data.length), loader);
       }
-      
+
       if (data.length > 0) {
-        return createList(data); 
+        return createList(data);
       }
     }, function() {
       loader.classList.add("loader-wrapper--visible");
@@ -132,16 +132,16 @@ function inputHandler() {
     }).then(function(list) {
       if (list) {
         if (variants.querySelector(".variants-list")) {
-          variants.removeChild(variants.querySelector(".variants-list"));  
+          variants.removeChild(variants.querySelector(".variants-list"));
         }
-        
+
         loader.classList.remove("loader-wrapper--visible")
         variants.insertBefore(list, variants.firstChild);
         setPosition();
       } else {
         throw new Error("not data");
       }
-      
+
     }, function(e) {
       return e;
     }).then(null , function(e) {
@@ -177,34 +177,34 @@ function createList(data) {
     elem.textContent = data[i].City;
     elem.classList.add("variants-list__item");
     fragment.appendChild(elem);
-    
+
     i++;
   }
-  
+
   var list = document.createElement("ul");
   list.classList.add("variants-list");
   list.appendChild(fragment);
   list.firstChild.classList.add("variants-list__item--selected");
   currentElem = list.firstChild;
-  
+
   return list;
 };
 
 function createMessage(type, listSize, dataLength) {
   var message = document.createElement("div");
-  
+
   switch (type) {
     case "amount":
       message.textContent = "Показано " + listSize + " из " + dataLength + " найденных городов. Уточните запрос, чтобы увидеть остальные.";
       message.classList.add("message");
-      return message;   
-        
-    case "not found": 
+      return message;
+
+    case "not found":
       message.textContent = "Не найдено";
       message.classList.add("message--not-found");
-      return message;   
-      
-    case "server error": 
+      return message;
+
+    case "server error":
       message.textContent = "Что-то пошло не так. Проверьте соединение с интернетом и попробуйте еще раз";
       message.classList.add("message--server-error");
       return message;

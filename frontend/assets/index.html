@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link href="css/style-min.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+  <div class="wrapper">
+    <input type="text" class = "text-field" id = "autocomplite-field" name="autocomplite-field" placeholder="Начните вводить название города">
+    <label class="error" id = "error-message">Выберите значение из списка</label>
+    <div class = "variants-container" id = "variants" data-list-size = 10>
+    <div class="loader-wrapper" id="loader">
+      <div class="loader">
+        <svg width="20" height="20">
+          <circle r="8" cx="10" cy="10" fill="white" stroke="lightgray" stroke-width="2"/>
+          <rect width="10" height="10" fill="white"/>
+        </svg>
+      </div>
+      <span>Загрузка</span>
+    </div>
+    </div>
+  </div>
+  <script src="js/request-min.js"></script>
+  <script src="js/autocomplite-min.js"></script>
+  <script src="js/scripts-min.js"></script>
+</body>
+</html>
