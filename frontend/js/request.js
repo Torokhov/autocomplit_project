@@ -1,4 +1,4 @@
-function Request() {
+export function Request() {
   this.get = function(path) {
     return new Promise(function(succeed, fail) {
       var xhr = new XMLHttpRequest();

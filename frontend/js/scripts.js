@@ -1,3 +1,5 @@
+import {Autocomplite} from "./autocomplite.js"
+
 var autocompliteField = document.getElementById("autocomplite-field");
 autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 

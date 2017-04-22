@@ -71,9 +71,9 @@ gulp.task('webpack', function(callback) {
       new webpack.DefinePlugin({
         NODE_ENV: JSON.stringify(isDevelopment)
       }),
-      new webpack.optimize.CommonsChunkPlugin({
-        name: "common"
-      })
+    //  new webpack.optimize.CommonsChunkPlugin({
+      //  name: "common"
+      //})
     ],
 
     resolve: {
@@ -165,10 +165,15 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('public/fonts'));
 });
 
-gulp.task('build', gulp.series('clean', gulp.parallel('styles', 'fonts', 'imagemin', 'fileinclude', 'webpack')));
+gulp.task('data', function() {
+  return gulp.src('frontend/data/**', {since: gulp.lastRun('data')})
+    .pipe(gulp.dest('public/data'));
+});
+
+gulp.task('build', gulp.series('clean', gulp.parallel('styles', 'fonts', 'imagemin', 'fileinclude', 'webpack', 'data')));
 
 gulp.task('watch', function() {
-  gulp.watch('frontend/styles/**/*.*', gulp.series('styles'));
+  gulp.watch('frontend/less/**/*.*', gulp.series('styles'));
 
   gulp.watch('frontend/assets/*.html', gulp.series('fileinclude'));
   gulp.watch('frontend/assets/html_includes/*.html', gulp.series('fileinclude'));

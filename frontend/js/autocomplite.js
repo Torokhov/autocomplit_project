@@ -1,4 +1,6 @@
-function Autocomplite(path) {
+import {Request} from "./request.js"
+
+export function Autocomplite(path) {
   this.path = path;
   var data;
 
