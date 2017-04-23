@@ -1,7 +1,7 @@
-export function Request() {
-  this.get = function(path) {
+export default class Request {
+  get(path) {
     return new Promise(function(succeed, fail) {
-      var xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
 
       xhr.open('GET', path, true);
       xhr.addEventListener("load", function() {
