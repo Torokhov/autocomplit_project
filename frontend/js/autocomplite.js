@@ -1,14 +1,16 @@
-import {Request} from "./request.js"
+import Request from "./request.js"
 
-export function Autocomplite(path) {
-  this.path = path;
-  var data;
+export default class Autocomplite {
+  constructor(path) {
+    this.path = path;
+    this.data = null;
+  };
 
-  this.getData = function(str) {
-    data = setData(this.path).then(parse);
+  getData(str) {
+    this.data = this.setData(this.path).then(this.parse);
 
-    return data.then(function(data) {
-      var reg = new RegExp("^" + str, "ig");
+    return this.data.then(function(data) {
+      const reg = new RegExp("^" + str, "ig");
 
       return data.filter(function(value) {
          return value.City.search(reg) >= 0;
@@ -16,16 +18,16 @@ export function Autocomplite(path) {
     });
   };
 
-  function setData(path) {
-    var req = new Request();
-    return req.get(path).then(function(text) {
+  setData() {
+    const req = new Request();
+    return req.get(this.path).then(function(text) {
       return text;
     }, function(error) {
       console.log("Fail to fetch data " + error);
     });
   };
 
-  function parse(text) {
+  parse(text) {
     return JSON.parse(text);
   };
 }
