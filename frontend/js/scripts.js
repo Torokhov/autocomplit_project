@@ -1,14 +1,14 @@
-import {Autocomplite} from "./autocomplite.js"
+import Autocomplite from "./autocomplite.js"
 
-var autocompliteField = document.getElementById("autocomplite-field");
+const autocompliteField = document.getElementById("autocomplite-field");
 autocompliteField.autocompliteLogic = new Autocomplite("data/kladr.json");
 
-var error = document.getElementById("error-message");
-var variants = document.getElementById("variants");
-var currentElem = null;
+const error = document.getElementById("error-message");
+const variants = document.getElementById("variants");
+let currentElem = null;
 
 variants.onclick = function(event) {
-  var target = event.target;
+  let target = event.target;
 
   if (target.tagName === "LI") {
     autocompliteField.value = target.textContent;
@@ -21,7 +21,7 @@ variants.onmouseover = function(event) {
     return;
   }
 
-  var target = event.target;
+  let target = event.target;
 
   while (target !== this) {
     if (target.tagName == "LI") break;
@@ -55,7 +55,7 @@ autocompliteField.onfocus = function() {
 };
 
 autocompliteField.onblur = function() {
-  var onBlurFunc = isValid.bind(this);
+  const onBlurFunc = isValid.bind(this);
 
   setTimeout(onBlurFunc, 200);
 
@@ -65,7 +65,7 @@ autocompliteField.onblur = function() {
         this.value = variants.querySelector(".variants-list").firstChild.textContent;
         variants.classList.remove("variants-container--visible");
       } else if (variants.querySelector(".variants-list")) {
-        var list = variants.querySelector(".variants-list");
+        let list = variants.querySelector(".variants-list");
         if (filter(this.value, list.children).length === 0) {
           showError();
         }
@@ -93,8 +93,8 @@ autocompliteField.onblur = function() {
 autocompliteField.addEventListener("input", inputHandler);
 
 function inputHandler() {
-  var listSize = variants.getAttribute("data-list-size");
-  var loader = document.getElementById("loader");
+  let listSize = variants.getAttribute("data-list-size");
+  let loader = document.getElementById("loader");
   if (this.value) {
     removeChildren(variants);
     variants.classList.add("variants-container--visible");
@@ -160,8 +160,8 @@ function inputHandler() {
 };
 
 function setPosition() {
-  var coords = autocompliteField.getBoundingClientRect();
-  var docEndSpace = document.documentElement.clientHeight - coords.bottom;
+  let coords = autocompliteField.getBoundingClientRect();
+  let docEndSpace = document.documentElement.clientHeight - coords.bottom;
     if (docEndSpace < variants.offsetHeight) {
       variants.style.top = -variants.offsetHeight - 3 + "px";
     } else {
@@ -170,10 +170,10 @@ function setPosition() {
 };
 
 function createList(data) {
-  var fragment = document.createDocumentFragment();
-  var listSize = variants.getAttribute("data-list-size");
-  var elem;
-  var i = 0;
+  const fragment = document.createDocumentFragment();
+  const listSize = variants.getAttribute("data-list-size");
+  let elem;
+  let i = 0;
   while (i < listSize && i < data.length) {
     elem = document.createElement("li");
     elem.textContent = data[i].City;
@@ -183,7 +183,7 @@ function createList(data) {
     i++;
   }
 
-  var list = document.createElement("ul");
+  let list = document.createElement("ul");
   list.classList.add("variants-list");
   list.appendChild(fragment);
   list.firstChild.classList.add("variants-list__item--selected");
@@ -193,7 +193,7 @@ function createList(data) {
 };
 
 function createMessage(type, listSize, dataLength) {
-  var message = document.createElement("div");
+  let message = document.createElement("div");
 
   switch (type) {
     case "amount":
@@ -214,7 +214,7 @@ function createMessage(type, listSize, dataLength) {
 };
 
 function createRefreshBtn() {
-  var refreshBtn = document.createElement("div");
+  let refreshBtn = document.createElement("div");
   refreshBtn.textContent = "Обновить";
   refreshBtn.classList.add("btn--refresh-btn");
   refreshBtn.addEventListener("click", inputHandler.bind(autocompliteField));
